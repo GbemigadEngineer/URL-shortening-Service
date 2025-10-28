@@ -1,0 +1,27 @@
+{
+  "name": "url-shortening-service",
+  "version": "1.0.0",
+  "description": "URL shortnening service project 6 of 20 backend dev project from begineer to mastery",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GbemigadEngineer/URL-shortening-Service.git"
+  },
+  "author": "Oduwole Oluwagbemiga",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GbemigadEngineer/URL-shortening-Service/issues"
+  },
+  "homepage": "https://github.com/GbemigadEngineer/URL-shortening-Service#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mongoose": "^8.19.2",
+    "nanoid": "^5.1.6",
+    "shortid": "^2.2.17"
+  }
+}
