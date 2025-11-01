@@ -1,12 +1,14 @@
 const express = require("express");
 const {
   createShortUrl,
-  redirectToOriginalUrl,
+  getOriginalUrl,
+  getAllUrls,
 } = require("../controller/urlController");
 
 const router = express.Router();
 
 router.route("/").post(createShortUrl);
-router.route("/:shortUrl").get(redirectToOriginalUrl);
+router.route("/lookup/:shortUrl").get(getOriginalUrl);
+router.get("/all", getAllUrls);
 
 module.exports = router;
