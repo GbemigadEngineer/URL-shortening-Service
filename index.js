@@ -2,7 +2,7 @@ const express = require("express");
 const urlRouter = require("./routes/urlRoutes");
 const cors = require("cors");
 const app = express();
-const path = require("path");
+
 const { redirectToOriginalUrl } = require("./controller/urlController");
 
 
@@ -12,8 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-// Serve frontend
-app.use(express.static(path.join(__dirname, "public")));
+
 
 // CORS middleware for handling cross-origin requests
 app.use(cors());
