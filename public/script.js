@@ -41,18 +41,22 @@ form.addEventListener("submit", async (e) => {
     });
 
     const data = await response.json();
-    const shortUrl = data.data.shortUrl;
+    const shortCode = data.data.shortUrl;
     const clicks = data.data.clicks || 0;
     const createdAt = data.data.createdAt;
 
-    shortLink.href = "#";
+    // 👇 NEW LOGIC: Construct the full, absolute, clickable URL
+    const fullShortUrl = `${baseRedirectUrl}/${shortCode}`;
+
+    shortLink.href = fullShortUrl; //
     shortLink.classList.add("short-url-link");
-    shortLink.setAttribute("data-code", shortUrl);
-    shortLink.textContent = shortUrl;
+    shortLink.setAttribute("data-code", shortCode);
+    shortLink.textContent = fullShortUrl; //
     resultContainer.classList.remove("d-none");
 
     copyBtn.onclick = () => {
-      navigator.clipboard.writeText(`${shortUrl}`).then(() => {
+      // ✅ Copy the full URL, not just the code
+      navigator.clipboard.writeText(fullShortUrl).then(() => {
         copyBtn.textContent = "Copied!";
         setTimeout(() => (copyBtn.textContent = "Copy"), 2000);
       });
@@ -81,9 +85,7 @@ document.addEventListener("click", async (e) => {
   if (!shortCode) return;
 
   try {
-    const response = await fetch(
-      `/api/v1/urls/lookup/${shortCode}`
-    );
+    const response = await fetch(`/api/v1/urls/lookup/${shortCode}`);
     if (!response.ok) throw new Error("Short URL not found");
 
     const data = await response.json();
