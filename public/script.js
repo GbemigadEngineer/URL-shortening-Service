@@ -6,7 +6,7 @@ const errorMessage = document.querySelector("#error-message");
 const tableBody = document.querySelector("#url-list-body");
 
 let urlCount = 0;
-const baseRedirectUrl = "http://127.0.0.1:3000/";
+const baseRedirectUrl = window.location.origin;
 const existingUrls = new Set(); // Track original URLs
 
 function addUrlToTable(originalUrl, shortUrl, clicks, createdAt) {
@@ -34,7 +34,7 @@ form.addEventListener("submit", async (e) => {
   if (!originalUrl) return;
 
   try {
-    const response = await fetch("http://127.0.0.1:3000/api/v1/urls", {
+    const response = await fetch("/api/v1/urls", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ originalUrl }),
@@ -82,7 +82,7 @@ document.addEventListener("click", async (e) => {
 
   try {
     const response = await fetch(
-      `http://127.0.0.1:3000/api/v1/urls/lookup/${shortCode}`
+      `/api/v1/urls/lookup/${shortCode}`
     );
     if (!response.ok) throw new Error("Short URL not found");
 
@@ -104,7 +104,7 @@ document.addEventListener("click", async (e) => {
 
 async function refreshTable() {
   try {
-    const response = await fetch("http://127.0.0.1:3000/api/v1/urls/all");
+    const response = await fetch("/api/v1/urls/all");
     const data = await response.json();
 
     if (!data || !data.data) return;
