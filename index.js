@@ -20,7 +20,7 @@ app.get("/:shortUrl", redirectToOriginalUrl);
 
 // ⚠️ This route MUST be placed AFTER all API and short URL routes!
 
-app.get("*", (req, res) => {
+app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
