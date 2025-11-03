@@ -37,9 +37,9 @@ function addUrlToTable(originalUrl, shortCode, clicks, createdAt) {
   tableBody.appendChild(row);
 }
 
-// ----------------------------------------------------------------------
+
 // FORM SUBMISSION HANDLER
-// ----------------------------------------------------------------------
+
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const originalUrl = document.querySelector(".form-control").value.trim();
@@ -98,9 +98,9 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
-// ----------------------------------------------------------------------
+
 // GLOBAL CLICK HANDLER (We remove the redundant fetch/redirect logic here)
-// ----------------------------------------------------------------------
+
 document.addEventListener("click", async (e) => {
   const link = e.target.closest(".short-url-link");
   if (!link) return;
@@ -129,7 +129,7 @@ async function refreshTable() {
     existingUrls.clear();
 
     data.data.forEach((url) => {
-      // Note: The backend response uses 'shortUrl', which is the short code.
+      
       addUrlToTable(url.originalUrl, url.shortUrl, url.clicks, url.dateCreated);
     });
 

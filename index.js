@@ -18,12 +18,5 @@ app.use("/api/v1/urls", urlRouter);
 
 app.get("/:shortUrl", redirectToOriginalUrl);
 
-// ⚠️ This route MUST be placed AFTER all API and short URL routes!
 
-// app.get("/*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "public", "index.html"));
-// });
-
-// ... your app.listen(PORT, ...) comes after this
-// export the app for use in other files
 module.exports = app;

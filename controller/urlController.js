@@ -74,7 +74,7 @@ const redirectToOriginalUrl = catchAsync(async (req, res, next) => {
     return res.status(404).send("Short URL not found");
   }
 
-  // ✅ Only send redirect — no other response
+  //  Only send redirect — no other response
   return res.redirect(url.originalUrl);
 });
 
