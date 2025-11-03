@@ -22,7 +22,7 @@ function addUrlToTable(originalUrl, shortCode, clicks, createdAt) {
   const placeholderRow = tableBody.querySelector("td[colspan='5']");
   if (placeholderRow) placeholderRow.parentElement.remove();
 
-  // Construct the full, clickable URL
+  // Construct the full, clickable URL for the link's destination
   const fullShortUrl = `${baseRedirectUrl}/${shortCode}`;
 
   urlCount++;
@@ -45,7 +45,6 @@ form.addEventListener("submit", async (e) => {
   const originalUrl = document.querySelector(".form-control").value.trim();
   if (!originalUrl) return;
 
-  // Clear previous error message
   errorMessage.classList.add("d-none");
 
   try {
@@ -65,7 +64,7 @@ form.addEventListener("submit", async (e) => {
     const clicks = data.data.clicks || 0;
     const createdAt = data.data.createdAt;
 
-    // Construct the full, absolute URL
+    // Construct the full, absolute URL for external use
     const fullShortUrl = `${baseRedirectUrl}/${shortCode}`;
 
     // Update the result display
@@ -73,13 +72,13 @@ form.addEventListener("submit", async (e) => {
     shortLink.classList.add("short-url-link");
     shortLink.setAttribute("data-code", shortCode);
 
-    // 👇 CHANGE 2: Display only the shortCode (the clean look you want)
+    // 👇 Display only the shortCode
     shortLink.textContent = shortCode;
 
     resultContainer.classList.remove("d-none");
 
+    // 👇 Copy button copies the FULL URL
     copyBtn.onclick = () => {
-      // ✅ FIX: Copy the full URL (which users can paste and redirect with)
       navigator.clipboard.writeText(fullShortUrl).then(() => {
         copyBtn.textContent = "Copied!";
         setTimeout(() => (copyBtn.textContent = "Copy"), 2000);
@@ -100,43 +99,17 @@ form.addEventListener("submit", async (e) => {
 });
 
 // ----------------------------------------------------------------------
-// GLOBAL CLICK HANDLER (Retained for completeness, although table link now handles redirect)
+// GLOBAL CLICK HANDLER (We remove the redundant fetch/redirect logic here)
 // ----------------------------------------------------------------------
 document.addEventListener("click", async (e) => {
   const link = e.target.closest(".short-url-link");
   if (!link) return;
 
-  // Since the link now has the full URL as href, we only need to preventDefault
-  // if we wanted to run the lookup logic first, which is often redundant.
-  // We'll keep the logic as is, relying on the link's href for actual navigation,
-  // and letting the browser handle the redirect via the server.
+  // We let the browser handle the redirect since the link's 'href' is the full URL.
+  // This action hits the backend route `/:shortUrl`, which handles the click count and redirect.
 
-  // If the link has a standard href, just let the browser handle it.
-  if (link.getAttribute("href") !== "#") return;
-
-  e.preventDefault();
-  const shortCode = link.getAttribute("data-code");
-  if (!shortCode) return;
-
-  try {
-    const response = await fetch(`/api/v1/urls/lookup/${shortCode}`);
-    if (!response.ok) throw new Error("Short URL not found");
-
-    const data = await response.json();
-    const originalUrl = data.data.originalUrl;
-    const updatedClicks = data.data.clicks;
-
-    // Update click count in the table
-    const row = link.closest("tr");
-    if (row) {
-      const clicksCell = row.querySelector("td:nth-child(4)");
-      if (clicksCell) clicksCell.textContent = updatedClicks;
-    }
-
-    window.open(originalUrl, "_blank");
-  } catch (err) {
-    alert("Failed to redirect: " + err.message);
-  }
+  // We only prevent default behavior if the link still uses '#' (not the case here).
+  // The previous fetch logic is now redundant/obsolete for simple redirection.
 });
 
 // ----------------------------------------------------------------------
@@ -156,7 +129,7 @@ async function refreshTable() {
     existingUrls.clear();
 
     data.data.forEach((url) => {
-      // Backend response uses 'shortUrl', which is the short code.
+      // Note: The backend response uses 'shortUrl', which is the short code.
       addUrlToTable(url.originalUrl, url.shortUrl, url.clicks, url.dateCreated);
     });
 
